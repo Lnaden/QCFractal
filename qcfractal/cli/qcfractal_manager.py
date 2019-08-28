@@ -793,7 +793,7 @@ def main(args=None):
             "nodes_per_block": 1,
             "worker_init": '\n'.join(settings.cluster.task_startup_commands),
             "cores_per_node": settings.common.cores_per_worker,
-            "mem_per_node": settings.common.memory_per_worker,
+            "mem_per_node": int(settings.common.memory_per_worker),
             **settings.parsl.provider.dict(skip_defaults=True, exclude={"partition", "launcher"})
         }
         if settings.parsl.provider.launcher:
