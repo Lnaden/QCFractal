@@ -451,7 +451,8 @@ class ParslProviderSettings(SettingsBlocker):
                     "``launcher_class`` as a str to specify which Launcher class to load, and the remaining settings "
                     "will be passed on to the Launcher's constructor."
     )
-    _forbidden_set = {"nodes_per_block", "max_blocks", "worker_init", "scheduler_options", "wall_time"}
+    _forbidden_set = {"nodes_per_block", "max_blocks", "worker_init", "scheduler_options", "wall_time",
+                      "cores_per_node", "memory_per_node"}
     _forbidden_name = "parsl's provider"
 
 
@@ -739,9 +740,9 @@ def main(args=None):
 
         scheduler_opts = settings.cluster.scheduler_options
 
-        if not settings.cluster.node_exclusivity:
-            raise ValueError("For now, QCFractal can only be run with Parsl in node exclusivity. This will be relaxed "
-                             "in a future release of Parsl and QCFractal")
+        # if not settings.cluster.node_exclusivity:
+        #     raise ValueError("For now, QCFractal can only be run with Parsl in node exclusivity. This will be relaxed "
+        #                      "in a future release of Parsl and QCFractal")
 
         # Import helpers
         _provider_loaders = {"slurm": "SlurmProvider",
@@ -791,6 +792,8 @@ def main(args=None):
             "scheduler_options": f'{provider_header} ' + f'\n{provider_header} '.join(scheduler_opts) + '\n',
             "nodes_per_block": 1,
             "worker_init": '\n'.join(settings.cluster.task_startup_commands),
+            "cores_per_node": settings.common.cores_per_worker,
+            "memory_per_node": settings.common.memory_per_worker,
             **settings.parsl.provider.dict(skip_defaults=True, exclude={"partition", "launcher"})
         }
         if settings.parsl.provider.launcher:
