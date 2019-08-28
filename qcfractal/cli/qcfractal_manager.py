@@ -452,7 +452,7 @@ class ParslProviderSettings(SettingsBlocker):
                     "will be passed on to the Launcher's constructor."
     )
     _forbidden_set = {"nodes_per_block", "max_blocks", "worker_init", "scheduler_options", "wall_time",
-                      "cores_per_node", "memory_per_node"}
+                      "cores_per_node", "mem_per_node"}
     _forbidden_name = "parsl's provider"
 
 
@@ -793,7 +793,7 @@ def main(args=None):
             "nodes_per_block": 1,
             "worker_init": '\n'.join(settings.cluster.task_startup_commands),
             "cores_per_node": settings.common.cores_per_worker,
-            "memory_per_node": settings.common.memory_per_worker,
+            "mem_per_node": settings.common.memory_per_worker,
             **settings.parsl.provider.dict(skip_defaults=True, exclude={"partition", "launcher"})
         }
         if settings.parsl.provider.launcher:
